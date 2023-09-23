@@ -1,6 +1,9 @@
 ---
   - name: docker_update
     hosts: docker
+    become: true
     tasks:
       - name: update docker hosts
-        apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+        apt:
+          upgrade: yes
+          update_cache: yes
