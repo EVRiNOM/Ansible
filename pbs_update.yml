@@ -1,9 +1,10 @@
 ---
-  - name: docker_update
-    hosts: pbs
-    become: true
-    tasks:
-      - name: update docker hosts
-        apt:
-          upgrade: yes
-          update_cache: yes
+- hosts: PBS
+  become: true
+  tasks:
+    - name: Update PBS Hosts
+      apt:
+        upgrade: yes
+        update_cache: yes
+        autoremove: yes
+        autoclean: yes
