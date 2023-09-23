@@ -1,6 +1,6 @@
 ---
   - name: docker_update
-    hosts: docker
+    hosts: pbs
     become: true
     tasks:
       - name: update docker hosts
