@@ -1,5 +1,5 @@
 ---
-- hosts: DCKR
+- hosts: dckr
   become: true
   tasks:
     - name: Update Docker Hosts
