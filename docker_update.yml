@@ -1,10 +1,10 @@
 ---
-  - name: docker_update
-    hosts: docker
-    become: true
-    tasks:
-      - name: update docker hosts
-        apt:
-          upgrade: yes
-          update_cache: yes
-          autoremove: yes
+- hosts: Docker
+  become: true
+  tasks:
+    - name: Update Docker Hosts
+      apt:
+        upgrade: yes
+        update_cache: yes
+        autoremove: yes
+        autoclean: yes
