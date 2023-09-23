@@ -1,10 +1,10 @@
 ---
-  - name: docker_update
-    hosts: pve
-    become: true
-    tasks:
-      - name: update pve hosts
-        apt:
-          upgrade: yes
-          update_cache: yes
-          autoremove: yes
+- hosts: PVE
+  become: true
+  tasks:
+    - name: update pve hosts
+      apt:
+        upgrade: yes
+        update_cache: yes
+        autoremove: yes
+        autoclean: yes
