@@ -1,5 +1,5 @@
 ---
-- hosts: Docker
+- hosts: homelab
   become: true
   tasks:
     - name: Update Docker Hosts
