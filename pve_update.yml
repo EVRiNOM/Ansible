@@ -2,7 +2,7 @@
 - hosts: PVE
   become: true
   tasks:
-    - name: update pve hosts
+    - name: Update PVE Hosts
       apt:
         upgrade: yes
         update_cache: yes
