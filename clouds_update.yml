@@ -1,5 +1,5 @@
 ---
-- hosts: Docker
+- hosts: Clouds
   become: true
   tasks:
     - name: Update Cloud Hosts
