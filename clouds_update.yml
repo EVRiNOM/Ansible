@@ -1,0 +1,10 @@
+---
+- hosts: Docker
+  become: true
+  tasks:
+    - name: Update Docker Hosts
+      apt:
+        upgrade: yes
+        update_cache: yes
+        autoremove: yes
+        autoclean: yes
