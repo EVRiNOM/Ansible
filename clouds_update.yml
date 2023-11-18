@@ -2,7 +2,7 @@
 - hosts: Docker
   become: true
   tasks:
-    - name: Update Docker Hosts
+    - name: Update Cloud Hosts
       apt:
         upgrade: yes
         update_cache: yes
