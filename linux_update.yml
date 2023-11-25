@@ -2,7 +2,7 @@
 - hosts: Linux
   become: true
   tasks:
-    - name: Update Docker Hosts
+    - name: Update Linux Hosts
       apt:
         upgrade: yes
         update_cache: yes
