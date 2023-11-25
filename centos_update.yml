@@ -1,0 +1,11 @@
+---
+- hosts: CentOS
+  become: true
+  tasks:
+    - name: Update CentOS Hosts
+      yum:
+        update_cache: yes
+        upgrade: yes
+        update_cache: yes
+        autoremove: yes
+        autoclean: yes
