@@ -1,6 +1,5 @@
 ---
 - hosts: Arch
-  become: true
   tasks:
     - name: Update Arch Host
       pacman:
