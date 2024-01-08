@@ -1,10 +1,7 @@
 ---
-- hosts: Linux
-  become: true
+- hosts: Arch
   tasks:
-    - name: Update Linux Hosts
-      apt:
-        upgrade: yes
+    - name: Update Arch Host
+      pacman:
         update_cache: yes
-        autoremove: yes
-        autoclean: yes
+        upgrade: yes
