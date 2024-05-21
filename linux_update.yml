@@ -1,5 +1,5 @@
 ---
-- name: Update, clean, and maintain Linux hosts
+- name: Update, clean, and maintain Debian-based hosts
   hosts: Linux
   become: true
   vars:
@@ -27,42 +27,6 @@
     - name: Clean apt cache
       apt:
         autoclean: yes
-
-    - name: Get current kernel version
-      command: uname -r
-      register: current_kernel
-
-    - name: Get list of installed kernels
-      shell: "dpkg --list 'linux-image*' | grep ^ii | awk '{print $2}'"
-      register: installed_kernels
-
-    - name: Get previous kernel version
-      shell: "dpkg --list 'linux-image*' | grep ^ii | awk '{print $2}' | sort -V | grep -B1 {{ current_kernel.stdout }} | head -n 1"
-      register: previous_kernel
-
-    - name: Set fact for kernels to keep
-      set_fact:
-        kernels_to_keep: "{{ [current_kernel.stdout, previous_kernel.stdout] }}"
-
-    - name: Debug current, previous, and installed kernels
-      debug:
-        msg: "Current: {{ current_kernel.stdout }}, Previous: {{ previous_kernel.stdout }}, Installed: {{ installed_kernels.stdout_lines }}"
-
-    - name: Remove unused kernels
-      apt:
-        name: "{{ item }}"
-        state: absent
-        purge: yes
-      loop: "{{ installed_kernels.stdout_lines | difference(kernels_to_keep) }}"
-      when: item not in kernels_to_keep
-
-    - name: Clean up package cache
-      apt:
-        autoclean: yes
-
-    - name: Autoremove unnecessary packages
-      apt:
-        autoremove: yes
 
     - name: Update GRUB
       command: update-grub
