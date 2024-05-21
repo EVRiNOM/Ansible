@@ -1,0 +1,41 @@
+---
+- name: Update and cleanup Debian system
+  hosts: linux
+  become: yes
+  tasks:
+    - name: Update apt package index
+      apt:
+        update_cache: yes
+
+    - name: Upgrade all packages to the latest version
+      apt:
+        upgrade: dist
+
+    - name: Remove unnecessary packages
+      apt:
+        autoremove: yes
+
+    - name: Clean up the apt cache
+      apt:
+        autoclean: yes
+
+    - name: Check for packages that can be purged
+      shell: apt-get purge $(dpkg -l | awk '/^rc/ { print $2 }') -y
+      register: purge_output
+      changed_when: purge_output.stdout != ''
+      ignore_errors: yes
+
+    - name: Clean up old kernels
+      shell: >
+        dpkg -l 'linux-*' |
+        sed '/^ii/!d;/'`uname -r | sed "s/\(.*\)-\([^0-9]\+\)/\1/"`'/d;s/^[^ ]* [^ ]* \([^ ]*\).*/\1/;/[0-9]/!d' |
+        xargs sudo apt-get -y purge
+      register: kernel_purge_output
+      changed_when: kernel_purge_output.stdout != ''
+      ignore_errors: yes
+
+    - name: Clean up orphaned packages
+      shell: deborphan | xargs sudo apt-get -y remove --purge
+      register: orphan_purge_output
+      changed_when: orphan_purge_output.stdout != ''
+      ignore_errors: yes
