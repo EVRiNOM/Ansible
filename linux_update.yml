@@ -1,10 +1,35 @@
 ---
-- hosts: Linux
+- name: Update and maintain Linux hosts
+  hosts: Linux
   become: true
+  vars:
+    package_manager: apt  # Can be changed to yum or other package managers if needed
+    update_options: "yes" # Additional options for update/upgrade tasks
+    restart_vm: false     # Set to true if VM restart is needed
   tasks:
-    - name: Update Linux Hosts
+    - name: Update apt cache
       apt:
-        upgrade: yes
+        update_cache: yes
+
+    - name: Upgrade all packages to the latest version
+      apt:
+        upgrade: dist
         update_cache: yes
         autoremove: yes
         autoclean: yes
+
+    - name: Remove unnecessary packages
+      apt:
+        name: '*'
+        state: absent
+        autoremove: yes
+
+    - name: Clean apt cache
+      apt:
+        autoclean: yes
+
+    - name: Restart the VM if needed
+      command: /sbin/shutdown -r now
+      when: restart_vm
+      async: 1
+      poll: 0
