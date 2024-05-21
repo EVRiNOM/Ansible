@@ -1,6 +1,6 @@
 ---
 - name: Update, clean, and maintain CentOS hosts
-  hosts: CentOS
+  hosts: Linux
   become: true
   vars:
     package_manager: yum  # Can be changed to dnf if needed
@@ -23,36 +23,6 @@
         autoremove: yes
 
     - name: Clean yum cache
-      command: yum clean all
-
-    - name: Get current kernel version
-      command: uname -r
-      register: current_kernel
-
-    - name: Get list of installed kernels
-      shell: "rpm -q kernel"
-      register: installed_kernels
-
-    - name: Get previous kernel version
-      shell: "rpm -q kernel | sort -V | grep -B1 {{ current_kernel.stdout }} | head -n 1"
-      register: previous_kernel
-
-    - name: Set fact for kernels to keep
-      set_fact:
-        kernels_to_keep: "{{ [current_kernel.stdout, previous_kernel.stdout] }}"
-
-    - name: Debug current, previous, and installed kernels
-      debug:
-        msg: "Current: {{ current_kernel.stdout }}, Previous: {{ previous_kernel.stdout }}, Installed: {{ installed_kernels.stdout_lines }}"
-
-    - name: Remove unused kernels
-      yum:
-        name: "{{ item }}"
-        state: absent
-      loop: "{{ installed_kernels.stdout_lines | difference(kernels_to_keep) }}"
-      when: item not in kernels_to_keep
-
-    - name: Clean up package cache
       command: yum clean all
 
     - name: Update GRUB
