@@ -1,6 +1,6 @@
 ---
 - name: Update and cleanup Debian system
-  hosts: linux
+  hosts: aphrodite
   become: yes
   tasks:
     - name: Update apt package index
