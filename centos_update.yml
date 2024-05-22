@@ -25,9 +25,6 @@
     - name: Clean yum cache
       command: yum clean all
 
-    - name: Update GRUB
-      command: grub2-mkconfig -o /boot/grub2/grub.cfg
-
     - name: Restart the VM if needed
       command: /sbin/shutdown -r now
       when: restart_vm | bool and not ansible_check_mode
