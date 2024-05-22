@@ -28,9 +28,6 @@
       apt:
         autoclean: yes
 
-    - name: Update GRUB
-      command: update-grub
-
     - name: Restart the VM if needed
       command: /sbin/shutdown -r now
       when: restart_vm | bool and not ansible_check_mode
