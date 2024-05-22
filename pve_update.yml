@@ -1,0 +1,28 @@
+---
+- name: Update, clean, and maintain Debian-based hosts
+  hosts: Linux
+  become: true
+  vars:
+    package_manager: apt  # Can be changed to yum or other package managers if needed
+    update_options: "yes" # Additional options for update/upgrade tasks
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Upgrade all packages to the latest version
+      apt:
+        upgrade: dist
+        update_cache: yes
+        autoremove: yes
+        autoclean: yes
+
+    - name: Remove unnecessary packages
+      apt:
+        name: '*'
+        state: absent
+        autoremove: yes
+
+    - name: Clean apt cache
+      apt:
+        autoclean: yes
