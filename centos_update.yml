@@ -1,6 +1,6 @@
 ---
 - name: Update, clean, and maintain CentOS hosts
-  hosts: Linux
+  hosts: CentOS
   become: true
   vars:
     package_manager: yum  # Can be changed to dnf if needed
