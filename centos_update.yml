@@ -16,12 +16,6 @@
         name: '*'
         state: latest
 
-    - name: Remove unnecessary packages
-      yum:
-        name: '*'
-        state: absent
-        autoremove: yes
-
     - name: Clean yum cache
       command: yum clean all
 
