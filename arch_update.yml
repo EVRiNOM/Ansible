@@ -12,10 +12,14 @@
       pacman:
         upgrade: yes
 
-    - name: Remove unnecessary packages with pacman
-      command: pacman -Rns $(pacman -Qdtq) --noconfirm
+    - name: Check for orphaned packages with pacman
+      command: pacman -Qdtq
+      register: orphaned_packages
       ignore_errors: yes
-      when: "(pacman -Qdtq | length) > 0"
+
+    - name: Remove unnecessary packages with pacman
+      command: pacman -Rns {{ orphaned_packages.stdout_lines }} --noconfirm
+      when: orphaned_packages.stdout != ""
 
     - name: Clean up pacman cache
       command: paccache -r
@@ -30,9 +34,14 @@
       environment:
         LC_ALL: C
 
+    - name: Check for orphaned packages with yay
+      command: yay -Qdtq
+      register: yay_orphaned_packages
+      ignore_errors: yes
+
     - name: Remove orphaned packages with yay
-      command: yay -Rns $(yay -Qdtq) --noconfirm
-      when: "(yay -Qdtq | length) > 0"
+      command: yay -Rns {{ yay_orphaned_packages.stdout_lines }} --noconfirm
+      when: yay_orphaned_packages.stdout != ""
 
     - name: Clean up yay cache
       command: yay -Sc --noconfirm
