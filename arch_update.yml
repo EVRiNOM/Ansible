@@ -2,6 +2,8 @@
 - name: Update and Cleanup Arch Linux with pacman and yay
   hosts: archlinux
   become: yes
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
 
   tasks:
     - name: Update pacman package database
