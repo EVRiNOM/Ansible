@@ -2,7 +2,6 @@
 - name: Update and Cleanup Arch Linux with pacman and yay
   hosts: archlinux
   become: yes
-  become_user: root
   vars:
     ansible_python_interpreter: /usr/bin/python3
 
