@@ -2,58 +2,49 @@
 - name: Update and Cleanup Arch Linux with pacman and yay
   hosts: archlinux
   become: yes
+  become_user: root
   vars:
     ansible_python_interpreter: /usr/bin/python3
 
   tasks:
     - name: Update pacman package database
-      become: yes
       pacman:
         update_cache: yes
 
     - name: Upgrade all packages with pacman
-      become: yes
       pacman:
         upgrade: yes
 
     - name: Check for orphaned packages with pacman
-      become: yes
       command: pacman -Qdtq
       register: orphaned_packages
       ignore_errors: yes
 
     - name: Remove unnecessary packages with pacman
-      become: yes
       command: pacman -Rns {{ orphaned_packages.stdout_lines }} --noconfirm
       when: orphaned_packages.stdout != ""
 
     - name: Clean up pacman cache
-      become: yes
       command: paccache -r
 
     - name: Ensure yay is installed
-      become: yes
       pacman:
         name: yay
         state: present
 
     - name: Update AUR packages with yay
-      become: yes
       command: yay -Syu --noconfirm
       environment:
         LC_ALL: C
 
     - name: Check for orphaned packages with yay
-      become: yes
       command: yay -Qdtq
       register: yay_orphaned_packages
       ignore_errors: yes
 
     - name: Remove orphaned packages with yay
-      become: yes
       command: yay -Rns {{ yay_orphaned_packages.stdout_lines }} --noconfirm
       when: yay_orphaned_packages.stdout != ""
 
     - name: Clean up yay cache
-      become: yes
       command: yay -Sc --noconfirm
