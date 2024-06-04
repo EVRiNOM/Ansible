@@ -13,10 +13,9 @@
         upgrade: yes
 
     - name: Remove unnecessary packages with pacman
-      pacman:
-        name: "*"
-        state: latest
-        extra_args: "--noconfirm -Rns $(pacman -Qdtq)"
+      command: pacman -Rns $(pacman -Qdtq) --noconfirm
+      ignore_errors: yes
+      when: "(pacman -Qdtq | length) > 0"
 
     - name: Clean up pacman cache
       command: paccache -r
