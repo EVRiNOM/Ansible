@@ -1,6 +1,6 @@
 ---
 - name: Update Arch Linux Machines
-  hosts: arch
+  hosts: arch_servers
   become: yes
   tasks:
     - name: Update pacman package manager cache
