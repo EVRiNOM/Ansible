@@ -1,6 +1,6 @@
 ---
 - name: Update, upgrade, clean and reboot Debian-based system if needed
-  hosts: your_hosts_group
+  hosts: Linux
   become: yes
 
   tasks:
