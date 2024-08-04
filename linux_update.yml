@@ -1,11 +1,8 @@
 ---
-- name: Update, clean, and maintain Debian-based hosts
-  hosts: Linux
-  become: true
-  vars:
-    package_manager: apt  # Can be changed to yum or other package managers if needed
-    update_options: "yes" # Additional options for update/upgrade tasks
-    restart_vm: false     # Default to false, will be overridden by CLI argument if needed
+- name: Update, upgrade, clean and reboot Debian-based system if needed
+  hosts: your_hosts_group
+  become: yes
+
   tasks:
     - name: Update apt cache
       apt:
@@ -14,22 +11,21 @@
     - name: Upgrade all packages to the latest version
       apt:
         upgrade: dist
-        update_cache: yes
-        autoremove: yes
-        autoclean: yes
+      register: upgrade_result
 
-    - name: Remove unnecessary packages
+    - name: Autoremove unnecessary packages
       apt:
-        name: '*'
-        state: absent
         autoremove: yes
 
-    - name: Clean apt cache
+    - name: Autoclean the package cache
       apt:
         autoclean: yes
 
-    - name: Restart the VM if needed
-      command: /sbin/shutdown -r now
-      when: restart_vm | bool and not ansible_check_mode
-      async: 1
-      poll: 0
+    - name: Check if a reboot is needed
+      stat:
+        path: /var/run/reboot-required
+      register: reboot_required
+
+    - name: Reboot the server if needed
+      reboot:
+      when: reboot_required.stat.exists
